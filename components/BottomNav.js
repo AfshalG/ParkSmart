@@ -5,14 +5,16 @@ import { usePathname } from "next/navigation";
 import styles from "./BottomNav.module.css";
 
 const TABS = [
-  { href: "/",       icon: "🔍", label: "Find"    },
-  { href: "/parked", icon: "🅿️", label: "Parked"  },
-  { href: "/stats",  icon: "💰", label: "Tracker" },
+  { href: "/",           icon: "🔍", label: "Find"    },
+  { href: "/parked",     icon: "🅿️", label: "Parked"  },
+  { href: "/stats",      icon: "💰", label: "Tracker" },
+  { href: "/favourites", icon: "⭐", label: "Saved"   },
 ];
 
 export default function BottomNav() {
   const pathname = usePathname();
   const [isParked, setIsParked] = useState(false);
+  const [savedCount, setSavedCount] = useState(0);
 
   // Read parked state from localStorage; update when parkedSessionChange fires
   useEffect(() => {
@@ -28,12 +30,28 @@ export default function BottomNav() {
     return () => window.removeEventListener("parkedSessionChange", check);
   }, []);
 
+  // Track number of saved carparks for the dot badge on the Saved tab
+  useEffect(() => {
+    const sync = () => {
+      try {
+        const favs = JSON.parse(localStorage.getItem("parksmart_favourites")) || [];
+        setSavedCount(favs.length);
+      } catch {
+        setSavedCount(0);
+      }
+    };
+    sync();
+    window.addEventListener("favouritesChange", sync);
+    return () => window.removeEventListener("favouritesChange", sync);
+  }, []);
+
   return (
     <nav className={styles.nav} aria-label="Main navigation">
       <div className={styles.tabList}>
         {TABS.map((tab) => {
           const isActive = pathname === tab.href;
-          const showDot = tab.href === "/parked" && isParked && !isActive;
+          const showParkedDot = tab.href === "/parked" && isParked && !isActive;
+          const showSavedDot = tab.href === "/favourites" && savedCount > 0 && !isActive;
           return (
             <Link
               key={tab.href}
@@ -43,7 +61,12 @@ export default function BottomNav() {
             >
               <span className={styles.tabIconWrap}>
                 <span className={styles.tabIcon}>{tab.icon}</span>
-                {showDot && <span className={styles.parkedDot} aria-hidden="true" />}
+                {showParkedDot && <span className={styles.parkedDot} aria-hidden="true" />}
+                {showSavedDot && (
+                  <span className={styles.savedCount} aria-hidden="true">
+                    {savedCount > 9 ? "9+" : savedCount}
+                  </span>
+                )}
               </span>
               <span className={styles.tabLabel}>{tab.label}</span>
             </Link>

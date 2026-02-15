@@ -35,3 +35,10 @@
   border-color: rgba(100, 116, 139, 0.2);
   color: var(--text-secondary);
 }
+
+/* ⭐ FAVOURITE_SUGGEST — amber */
+.typeFavouriteSuggest {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: var(--yellow);
+}

@@ -1,7 +1,8 @@
 "use client";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import styles from "./ResultsList.module.css";
 import RecommendationBanner from "./RecommendationBanner";
+import { getFavourites, toggleFavourite } from "@/lib/favouritesStorage";
 
 // ScoreRing: SVG with dynamic stroke color — keep as SVG attributes (computed values)
 function ScoreRing({ score, size = 48 }) {
@@ -58,7 +59,7 @@ function StatBox({ label, value, sub, color }) {
   );
 }
 
-function CarparkCard({ carpark, isSelected, onSelect, onNavigate, duration }) {
+function CarparkCard({ carpark, isSelected, isFav, onSelect, onNavigate, onToggleFav, duration }) {
   const cp = carpark;
   const lotsClass =
     cp.availableLots > 30 ? styles.lotsHigh
@@ -68,14 +69,23 @@ function CarparkCard({ carpark, isSelected, onSelect, onNavigate, duration }) {
   return (
     <div
       onClick={() => onSelect(cp)}
-      className={`${styles.card} ${isSelected ? styles.cardSelected : ""}`}
+      className={`${styles.card} ${isSelected ? styles.cardSelected : ""} ${isFav ? styles.cardFavourited : ""}`}
     >
-      {(cp.badge || cp.isFreeToday) && (
-        <div className={styles.badgeSlot}>
-          {cp.badge && <Badge text={cp.badge} />}
-          {cp.isFreeToday && <Badge text="FREE TODAY" />}
-        </div>
-      )}
+      <div className={styles.cardTopRight}>
+        {(cp.badge || cp.isFreeToday) && (
+          <div className={styles.badgeSlot}>
+            {cp.badge && <Badge text={cp.badge} />}
+            {cp.isFreeToday && <Badge text="FREE TODAY" />}
+          </div>
+        )}
+        <button
+          className={`${styles.starBtn} ${isFav ? styles.starBtnActive : ""}`}
+          onClick={(e) => { e.stopPropagation(); onToggleFav(cp); }}
+          aria-label={isFav ? `Remove ${cp.name} from saved` : `Save ${cp.name}`}
+        >
+          {isFav ? "⭐" : "☆"}
+        </button>
+      </div>
 
       <div className={styles.cardBody}>
         <ScoreRing score={cp.score} size={52} />
@@ -176,6 +186,28 @@ export function ResultsSkeleton() {
 }
 
 export default function ResultsList({ carparks, recommendations, selectedCarpark, onSelectCarpark, onNavigate, duration }) {
+  const [favIds, setFavIds] = useState(new Set());
+
+  // Sync favourites from localStorage; update on change events
+  useEffect(() => {
+    const sync = () => setFavIds(new Set(getFavourites().map((f) => f.id)));
+    sync();
+    window.addEventListener("favouritesChange", sync);
+    return () => window.removeEventListener("favouritesChange", sync);
+  }, []);
+
+  const handleToggleFav = (cp) => {
+    toggleFavourite({
+      id: cp.id,
+      name: cp.name,
+      agency: cp.agency,
+      lat: cp.lat,
+      lng: cp.lng,
+      isCentral: cp.isCentral,
+      area: cp.area || "",
+    });
+  };
+
   if (carparks.length === 0) {
     return (
       <div className={styles.emptyState}>
@@ -191,9 +223,24 @@ export default function ResultsList({ carparks, recommendations, selectedCarpark
     return { bestPrice: best, savings: (worst - best).toFixed(2) };
   }, [carparks]);
 
+  // Smart suggestion: if a saved carpark is in results with low availability, suggest an alternative
+  const favouriteSuggestion = useMemo(() => {
+    if (!favIds.size) return null;
+    const lowFav = carparks.find((cp) => favIds.has(cp.id) && cp.availableLots >= 0 && cp.availableLots < 10);
+    if (!lowFav) return null;
+    const alt = carparks.find((cp) => !favIds.has(cp.id) && cp.availableLots > 10);
+    if (!alt) return null;
+    return { type: "FAVOURITE_SUGGEST", favouriteName: lowFav.name, availableLots: lowFav.availableLots, altName: alt.name, altLots: alt.availableLots };
+  }, [carparks, favIds]);
+
+  const allRecommendations = useMemo(
+    () => (favouriteSuggestion ? [favouriteSuggestion, ...recommendations] : recommendations),
+    [favouriteSuggestion, recommendations]
+  );
+
   return (
     <div className={styles.listWrapper}>
-      <RecommendationBanner recommendations={recommendations} />
+      <RecommendationBanner recommendations={allRecommendations} />
       <div className={styles.summaryBar}>
         {[
           { label: "Found", value: `${carparks.length} carparks`, color: "var(--accent-light)" },
@@ -213,8 +260,10 @@ export default function ResultsList({ carparks, recommendations, selectedCarpark
             <CarparkCard
               carpark={cp}
               isSelected={selectedCarpark?.id === cp.id}
+              isFav={favIds.has(cp.id)}
               onSelect={onSelectCarpark}
               onNavigate={onNavigate}
+              onToggleFav={handleToggleFav}
               duration={duration}
             />
           </div>

@@ -13,6 +13,9 @@ const BANNER_COPY = {
 
   EARLY_BIRD: (rec) =>
     `🌅 Early bird rates may apply at ${rec.ltaCount} mall carpark${rec.ltaCount > 1 ? "s" : ""} — check the entrance board.`,
+
+  FAVOURITE_SUGGEST: (rec) =>
+    `⭐ Your saved spot "${rec.favouriteName}" has only ${rec.availableLots} lots — ${rec.altName} nearby has ${rec.altLots} lots available.`,
 };
 
 /**
@@ -33,6 +36,7 @@ export default function RecommendationBanner({ recommendations }) {
     EVENING_SOON: styles.typeEveningSoon,
     NIGHT_ACTIVE: styles.typeNightActive,
     EARLY_BIRD: styles.typeEarlyBird,
+    FAVOURITE_SUGGEST: styles.typeFavouriteSuggest,
   }[rec.type] || "";
 
   return (

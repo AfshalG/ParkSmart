@@ -80,12 +80,6 @@
   border-color: rgba(99, 102, 241, 0.3);
 }
 
-.badgeSlot {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
 .cardBody {
   display: flex;
   gap: 14px;
@@ -104,6 +98,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding-right: 28px; /* reserve space for star button */
 }
 
 .cardNameWithBadge {
@@ -273,6 +268,51 @@
 .badgeCheapest  { background: linear-gradient(135deg, #10b981, #059669); }
 .badgeNearest   { background: linear-gradient(135deg, #f59e0b, #d97706); }
 .badgeFree      { background: linear-gradient(135deg, #10b981, #059669); }
+
+/* ---- Favourite state ---- */
+.cardFavourited {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+/* Top-right area: stacks badge + star vertically */
+.cardTopRight {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+/* Re-usable slot inside cardTopRight for badge(s) */
+.badgeSlot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.starBtn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px;
+  opacity: 0.35;
+  transition: opacity 0.15s, transform 0.15s;
+  color: inherit;
+}
+
+.starBtn:hover {
+  opacity: 0.7;
+  transform: scale(1.2);
+}
+
+.starBtnActive {
+  opacity: 1;
+}
 
 /* ---- Agency badge ---- */
 .agencyBadge {

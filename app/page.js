@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import SearchPanel from "@/components/SearchPanel";
 import ResultsList, { ResultsSkeleton } from "@/components/ResultsList";
 // MapView uses Leaflet (browser-only) — dynamic with ssr:false excludes it
@@ -20,6 +20,7 @@ export default function Home() {
   const [priority, setPriority] = useState("balanced");
   const [showMap, setShowMap] = useState(false);
   const [searched, setSearched] = useState(false);
+  const [initialDest, setInitialDest] = useState(null);
 
   const handleSearch = useCallback(async (dest, dur, pri) => {
     setLoading(true);
@@ -51,6 +52,19 @@ export default function Home() {
     }
   }, []);
 
+  // Auto-search when deep-linked from the Favourites page (?lat=&lng=&name=)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const lat = parseFloat(params.get("lat"));
+    const lng = parseFloat(params.get("lng"));
+    const name = params.get("name");
+    if (!isNaN(lat) && !isNaN(lng) && name) {
+      const dest = { lat, lng, name };
+      setInitialDest(dest);
+      handleSearch(dest, 2, "balanced");
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleNavigate = useCallback((carpark) => {
     window.open(
       `https://www.google.com/maps/dir/?api=1&destination=${carpark.lat},${carpark.lng}&travelmode=driving`,
@@ -61,7 +75,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <ErrorBoundary>
-        <SearchPanel onSearch={handleSearch} loading={loading} />
+        <SearchPanel onSearch={handleSearch} loading={loading} initialDest={initialDest} />
 
         {error && (
           <div className={styles.errorBanner}>

@@ -9,7 +9,7 @@ const PRIORITIES = [
   { key: "best_value", label: "Best Value", icon: "✨", desc: "Quality + price" },
 ];
 
-export default function SearchPanel({ onSearch, loading }) {
+export default function SearchPanel({ onSearch, loading, initialDest }) {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [selectedDest, setSelectedDest] = useState(null);
@@ -18,6 +18,14 @@ export default function SearchPanel({ onSearch, loading }) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const debounceRef = useRef(null);
   const inputRef = useRef(null);
+
+  // Pre-fill when deep-linked from favourites (?lat=&lng=&name=)
+  useEffect(() => {
+    if (initialDest && initialDest.name) {
+      setQuery(initialDest.name);
+      setSelectedDest(initialDest);
+    }
+  }, [initialDest]);
 
   const searchPlaces = useCallback(async (q) => {
     if (q.length < 2) {
