@@ -19,7 +19,7 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 1,
   // Match the app's dark background as the browser chrome colour on Android
-  themeColor: "#6366F1",
+  themeColor: "#0E1014",
 };
 
 export default function RootLayout({ children }) {
@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link
-          href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,800;1,9..40,400&family=Space+Mono:wght@400;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@400;600&display=swap"
           rel="stylesheet"
         />
       </head>
