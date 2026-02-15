@@ -147,12 +147,28 @@ function CarparkCard({ carpark, isSelected, isFav, onSelect, onNavigate, onToggl
             </div>
           </div>
 
-          <button
-            onClick={(e) => { e.stopPropagation(); onNavigate(cp); }}
-            className={styles.navigateBtn}
-          >
-            🧭 Navigate with Google Maps
-          </button>
+          <div className={styles.expandedBtns}>
+            <button
+              onClick={(e) => { e.stopPropagation(); onNavigate(cp); }}
+              className={styles.navigateBtn}
+            >
+              🧭 Navigate
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                try {
+                  localStorage.setItem("parksmart_last_selected_carpark", JSON.stringify({
+                    id: cp.id, name: cp.name, agency: cp.agency, isCentral: cp.isCentral,
+                  }));
+                } catch {}
+                window.location.href = "/parked";
+              }}
+              className={styles.parkHereBtn}
+            >
+              🚗 Park Here
+            </button>
+          </div>
         </div>
       )}
     </div>

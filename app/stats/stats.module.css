@@ -1,0 +1,435 @@
+.main {
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 20px calc(80px + env(safe-area-inset-bottom, 0px));
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.totalSessions {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-light);
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-family: 'Space Mono', monospace;
+}
+
+/* ── Month Navigation ── */
+.monthNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px 4px;
+}
+
+.monthNavBtn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 6px 16px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.monthNavBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.monthNavBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.monthLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: 'Space Mono', monospace;
+}
+
+/* ── Monthly Total Card ── */
+.totalCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.totalCardLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-family: 'Space Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.totalAmount {
+  font-size: 44px;
+  font-weight: 800;
+  color: var(--green);
+  line-height: 1;
+  margin-bottom: 6px;
+  font-family: 'Space Mono', monospace;
+}
+
+.totalDelta {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.deltaUp   { color: var(--red); }
+.deltaDown { color: var(--green); }
+
+.totalSub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Section ── */
+.section {
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-family: 'Space Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+}
+
+/* ── Chart Card ── */
+.chartCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.chartEmpty {
+  font-size: 13px;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 24px 0;
+}
+
+/* ── Bar Chart ── */
+.barChart {
+  display: flex;
+  gap: 4px;
+  height: 110px;
+  align-items: flex-end;
+}
+
+.barCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.barWrapper {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+}
+
+.barAmount {
+  font-size: 7px;
+  font-family: 'Space Mono', monospace;
+  color: var(--green);
+  font-weight: 700;
+  margin-bottom: 2px;
+  white-space: nowrap;
+}
+
+.bar {
+  width: 100%;
+  background: linear-gradient(to top, #10b981, #34d399);
+  border-radius: 3px 3px 0 0;
+  min-height: 2px;
+  transition: height 0.4s ease;
+}
+
+.barLabel {
+  font-size: 7px;
+  color: var(--text-muted);
+  font-family: 'Space Mono', monospace;
+  text-align: center;
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  max-width: 100%;
+}
+
+/* ── Top Carparks ── */
+.topList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.topItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.topRank {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-muted);
+  font-family: 'Space Mono', monospace;
+  min-width: 20px;
+  text-align: center;
+}
+
+.topInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.topName {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 3px;
+}
+
+.topMeta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.topAgency {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'Space Mono', monospace;
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.topVisits {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.topBarTrack {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.topBarFill {
+  height: 100%;
+  background: linear-gradient(to right, #10b981, #34d399);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.topCost {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--green);
+  font-family: 'Space Mono', monospace;
+  white-space: nowrap;
+}
+
+/* ── Session list ── */
+.sessionList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sessionItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.sessionLeft {
+  flex: 1;
+  min-width: 0;
+}
+
+.sessionName {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 2px;
+}
+
+.sessionMeta {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.sessionRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.sessionCost {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--green);
+  font-family: 'Space Mono', monospace;
+}
+
+.sessionDelete {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.sessionDelete:hover {
+  color: var(--red);
+}
+
+/* ── Empty state ── */
+.emptyState {
+  text-align: center;
+  padding: 40px 24px;
+}
+
+.emptyIcon {
+  font-size: 56px;
+  margin-bottom: 14px;
+}
+
+.emptyText {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+/* ── Clear History ── */
+.clearSection {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.clearBtn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.05);
+  color: #f87171;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clearConfirm {
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+.clearConfirmText {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.clearConfirmBtns {
+  display: flex;
+  gap: 8px;
+}
+
+.clearConfirmYes {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #ef4444;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.clearConfirmNo {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}

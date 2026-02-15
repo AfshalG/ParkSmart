@@ -2,6 +2,8 @@
 import { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { saveSession, getSession, extendSession, clearSession } from "@/lib/parkedStorage";
+import { logSpend } from "@/lib/spendStorage";
+import { calculateParkingCost } from "@/lib/parking";
 import {
   requestNotificationPermission,
   scheduleParkingReminder,
@@ -55,10 +57,16 @@ export default function ParkedPage() {
   const [selectedReminder, setSelectedReminder] = useState(REMINDER_PRESETS[3]); // 15 min default
   const [gpsState, setGpsState] = useState("idle"); // idle | loading | error
   const [gpsError, setGpsError] = useState("");
+  const [prefilledCarpark, setPrefilledCarpark] = useState(null);
+  const [loggedEntry, setLoggedEntry] = useState(null); // brief confirmation after done
 
-  // Load session on mount
+  // Load session and any pre-filled carpark from the Find tab
   useEffect(() => {
     setSession(getSession());
+    try {
+      const raw = localStorage.getItem("parksmart_last_selected_carpark");
+      if (raw) setPrefilledCarpark(JSON.parse(raw));
+    } catch {}
   }, []);
 
   // Countdown ticker
@@ -84,7 +92,13 @@ export default function ParkedPage() {
         const expiresAt = Date.now() + selectedDuration.ms;
         const reminderMins = selectedReminder.mins;
 
-        const saved = saveSession({ lat, lng, expiresAt, label: "", reminderMins });
+        const saved = saveSession({
+          lat, lng, expiresAt, reminderMins,
+          carparkId:   prefilledCarpark?.id   || null,
+          carparkName: prefilledCarpark?.name || "",
+          agency:      prefilledCarpark?.agency    || "HDB",
+          isCentral:   prefilledCarpark?.isCentral || false,
+        });
         setSession(saved);
         setGpsState("idle");
 
@@ -123,6 +137,33 @@ export default function ParkedPage() {
   };
 
   const handleClear = async () => {
+    // Log the spend before clearing the session
+    if (session) {
+      const endedAt = Date.now();
+      const durationHours = (endedAt - session.parkedAt) / 3600000;
+      const { cost } = calculateParkingCost(
+        session.agency || "HDB",
+        durationHours,
+        session.isCentral || false,
+        session.parkedAt,
+        session.carparkId || null
+      );
+      const entry = logSpend({
+        carparkName:  session.carparkName || "Unknown Carpark",
+        carparkId:    session.carparkId,
+        agency:       session.agency || "HDB",
+        cost,
+        durationHours,
+        parkedAt:     session.parkedAt,
+        endedAt,
+        lat:          session.lat,
+        lng:          session.lng,
+      });
+      setLoggedEntry(entry);
+      // Clear the pre-filled carpark after use
+      try { localStorage.removeItem("parksmart_last_selected_carpark"); } catch {}
+      setPrefilledCarpark(null);
+    }
     await cancelParkingReminder();
     clearSession();
     setSession(null);
@@ -146,6 +187,18 @@ export default function ParkedPage() {
     return (
       <main className={styles.main}>
         <div className={styles.section}>
+          {/* Carpark name chip */}
+          {session.carparkName && (
+            <div className={styles.carparkChip}>📍 {session.carparkName}</div>
+          )}
+
+          {/* Spend confirmation flash */}
+          {loggedEntry && (
+            <div className={styles.loggedBanner}>
+              ✅ Logged $<strong>{loggedEntry.cost.toFixed(2)}</strong> for {loggedEntry.carparkName}
+            </div>
+          )}
+
           {/* Map */}
           <ParkedMap lat={session.lat} lng={session.lng} />
 
@@ -194,6 +247,22 @@ export default function ParkedPage() {
         <p className={styles.heroSub}>
           Drop a pin at your car&apos;s GPS location and set a parking timer.
         </p>
+
+        {/* Pre-filled carpark chip */}
+        {prefilledCarpark && (
+          <div className={styles.prefilledChip}>
+            <span>📍 {prefilledCarpark.name}</span>
+            <button
+              className={styles.prefilledClear}
+              onClick={() => {
+                setPrefilledCarpark(null);
+                try { localStorage.removeItem("parksmart_last_selected_carpark"); } catch {}
+              }}
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         {/* Duration picker */}
         <div className={styles.pickerBlock}>
