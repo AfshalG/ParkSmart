@@ -1,6 +1,7 @@
 "use client";
 import { useMemo } from "react";
 import styles from "./ResultsList.module.css";
+import RecommendationBanner from "./RecommendationBanner";
 
 // ScoreRing: SVG with dynamic stroke color — keep as SVG attributes (computed values)
 function ScoreRing({ score, size = 48 }) {
@@ -32,8 +33,9 @@ function ScoreRing({ score, size = 48 }) {
 
 function Badge({ text }) {
   const cls =
-    text === "BEST MATCH" ? styles.badgeBestMatch
+    text === "BEST MATCH"  ? styles.badgeBestMatch
     : text === "CHEAPEST"  ? styles.badgeCheapest
+    : text === "FREE TODAY" ? styles.badgeFree
     : styles.badgeNearest;
   return <span className={`${styles.badge} ${cls}`}>{text}</span>;
 }
@@ -68,9 +70,10 @@ function CarparkCard({ carpark, isSelected, onSelect, onNavigate, duration }) {
       onClick={() => onSelect(cp)}
       className={`${styles.card} ${isSelected ? styles.cardSelected : ""}`}
     >
-      {cp.badge && (
+      {(cp.badge || cp.isFreeToday) && (
         <div className={styles.badgeSlot}>
-          <Badge text={cp.badge} />
+          {cp.badge && <Badge text={cp.badge} />}
+          {cp.isFreeToday && <Badge text="FREE TODAY" />}
         </div>
       )}
 
@@ -86,8 +89,13 @@ function CarparkCard({ carpark, isSelected, onSelect, onNavigate, duration }) {
           </div>
           <div className={styles.cardStats}>
             <div>
-              <span className={styles.cardCost}>${cp.cost.toFixed(2)}</span>
-              <span className={styles.cardCostLabel}>total</span>
+              <span
+                className={styles.cardCost}
+                style={cp.isFreeToday ? { color: "var(--green)" } : undefined}
+              >
+                ${cp.cost.toFixed(2)}
+              </span>
+              <span className={styles.cardCostLabel}>{cp.isFreeToday ? "FREE" : "total"}</span>
             </div>
             <div className={styles.cardMinorStats}>
               <span>🚶 {cp.walkTimeMin}min</span>
@@ -167,7 +175,7 @@ export function ResultsSkeleton() {
   );
 }
 
-export default function ResultsList({ carparks, selectedCarpark, onSelectCarpark, onNavigate, duration }) {
+export default function ResultsList({ carparks, recommendations, selectedCarpark, onSelectCarpark, onNavigate, duration }) {
   if (carparks.length === 0) {
     return (
       <div className={styles.emptyState}>
@@ -185,6 +193,7 @@ export default function ResultsList({ carparks, selectedCarpark, onSelectCarpark
 
   return (
     <div className={styles.listWrapper}>
+      <RecommendationBanner recommendations={recommendations} />
       <div className={styles.summaryBar}>
         {[
           { label: "Found", value: `${carparks.length} carparks`, color: "var(--accent-light)" },

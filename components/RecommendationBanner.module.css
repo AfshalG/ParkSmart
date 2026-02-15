@@ -1,0 +1,37 @@
+.banner {
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 600;
+  border: 1px solid transparent;
+  margin-bottom: 12px;
+}
+
+/* 🎉 SUNDAY_FREE — green */
+.typeSundayFree {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: var(--green);
+}
+
+/* ⏱ EVENING_SOON — amber */
+.typeEveningSoon {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: var(--yellow);
+}
+
+/* 🌙 NIGHT_ACTIVE — indigo */
+.typeNightActive {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.3);
+  color: var(--accent-light);
+}
+
+/* 🌅 EARLY_BIRD — muted */
+.typeEarlyBird {
+  background: rgba(100, 116, 139, 0.08);
+  border-color: rgba(100, 116, 139, 0.2);
+  color: var(--text-secondary);
+}

@@ -12,6 +12,7 @@ import styles from "./page.module.css";
 export default function Home() {
   const [destination, setDestination] = useState(null);
   const [carparks, setCarparks] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedCarpark, setSelectedCarpark] = useState(null);
@@ -36,6 +37,7 @@ export default function Home() {
       if (data.error) throw new Error(data.error);
 
       setCarparks(data.carparks || []);
+      setRecommendations(data.recommendations || []);
       if (data.carparks?.length > 0) {
         setSelectedCarpark(data.carparks[0]);
         setShowMap(true);
@@ -43,6 +45,7 @@ export default function Home() {
     } catch (err) {
       setError(err.message);
       setCarparks([]);
+      setRecommendations([]);
     } finally {
       setLoading(false);
     }
@@ -102,6 +105,7 @@ export default function Home() {
         {searched && !loading && (
           <ResultsList
             carparks={carparks}
+            recommendations={recommendations}
             selectedCarpark={selectedCarpark}
             onSelectCarpark={setSelectedCarpark}
             onNavigate={handleNavigate}
