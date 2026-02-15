@@ -13,27 +13,49 @@ body {
 }
 
 :root {
-  --bg-primary: #0A0E1A;
-  --bg-secondary: #111827;
-  --bg-card: rgba(255, 255, 255, 0.03);
-  --border: rgba(255, 255, 255, 0.06);
-  --border-active: rgba(99, 102, 241, 0.5);
-  --text-primary: #E2E8F0;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
-  --text-dim: #475569;
-  --accent: #6366F1;
-  --accent-light: #818CF8;
-  --accent-purple: #8B5CF6;
-  --green: #10B981;
-  --green-dark: #059669;
-  --yellow: #F59E0B;
-  --red: #EF4444;
-  --pink: #F472B6;
+  --font-display: 'Rajdhani', sans-serif;
+  --font-mono:    'IBM Plex Mono', monospace;
+  --font-body:    'Outfit', sans-serif;
+
+  /* Backgrounds — warm near-black */
+  --bg-primary:    #0E1014;
+  --bg-secondary:  #13161C;
+  --bg-card:       rgba(255,255,255,0.025);
+  --bg-elevated:   #1A1E26;
+
+  /* Borders */
+  --border:        rgba(255,255,255,0.055);
+  --border-active: rgba(212,168,90,0.45);
+
+  /* Text — warm whites */
+  --text-primary:  #F0EDE8;
+  --text-secondary:#A89F94;
+  --text-muted:    #6B6460;
+  --text-dim:      #4A4340;
+
+  /* Amber — primary accent (replaces indigo) */
+  --amber:         #D4A85A;
+  --amber-light:   #F0C47A;
+  --amber-dim:     rgba(212,168,90,0.12);
+
+  /* Aliases so existing CSS using --accent still works */
+  --accent:        #D4A85A;
+  --accent-light:  #F0C47A;
+  --accent-purple: #D4A85A;
+
+  /* Functional colors */
+  --teal:          #00CCA8;
+  --teal-dark:     #00A88A;
+  --green:         #00CCA8;  /* alias — existing .cardCost { color: var(--green) } works */
+  --green-dark:    #00A88A;
+  --red:           #E05555;
+  --orange:        #F07840;
+  --yellow:        #F07840;  /* alias for existing --yellow references */
+  --pink:          #F06080;
 }
 
 body {
-  font-family: 'DM Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   background: linear-gradient(165deg, var(--bg-primary) 0%, var(--bg-secondary) 40%, #0D1321 100%);
   color: var(--text-primary);
   min-height: 100vh;
@@ -42,7 +64,7 @@ body {
 
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(212, 168, 90, 0.2); border-radius: 3px; }
 
 input:focus, select:focus, button:focus { outline: none; }
 
@@ -66,12 +88,17 @@ input:focus, select:focus, button:focus { outline: none; }
   100% { background-position: 400px 0; }
 }
 
+@keyframes cardEntry {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .skeleton {
   background: linear-gradient(
     90deg,
-    rgba(255,255,255,0.04) 25%,
-    rgba(255,255,255,0.08) 50%,
-    rgba(255,255,255,0.04) 75%
+    rgba(212,168,90,0.04) 25%,
+    rgba(212,168,90,0.09) 50%,
+    rgba(212,168,90,0.04) 75%
   );
   background-size: 800px 100%;
   animation: shimmer 1.4s infinite linear;
@@ -79,7 +106,7 @@ input:focus, select:focus, button:focus { outline: none; }
 }
 
 .leaflet-container {
-  background: #0D1321 !important;
+  background: #0E1014 !important;
 }
 
 .leaflet-tile-pane {

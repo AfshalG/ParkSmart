@@ -3,12 +3,16 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./BottomNav.module.css";
+import SearchIcon from "./icons/SearchIcon";
+import ParkingIcon from "./icons/ParkingIcon";
+import BookmarkIcon from "./icons/BookmarkIcon";
+import ChartIcon from "./icons/ChartIcon";
 
 const TABS = [
-  { href: "/",           icon: "🔍", label: "Find"    },
-  { href: "/parked",     icon: "🅿️", label: "Parked"  },
-  { href: "/stats",      icon: "💰", label: "Tracker" },
-  { href: "/favourites", icon: "⭐", label: "Saved"   },
+  { href: "/",           Icon: SearchIcon,   label: "Find"    },
+  { href: "/parked",     Icon: ParkingIcon,  label: "Parked"  },
+  { href: "/stats",      Icon: ChartIcon,    label: "Tracker" },
+  { href: "/favourites", Icon: BookmarkIcon, label: "Saved"   },
 ];
 
 export default function BottomNav() {
@@ -61,7 +65,7 @@ export default function BottomNav() {
               aria-current={isActive ? "page" : undefined}
             >
               <span className={styles.tabIconWrap}>
-                <span className={styles.tabIcon}>{tab.icon}</span>
+                <tab.Icon size={22} className={styles.tabIcon} aria-hidden="true" />
                 {showParkedDot && <span className={styles.parkedDot} aria-hidden="true" />}
                 {showSavedDot && (
                   <span className={styles.savedCount} aria-hidden="true">

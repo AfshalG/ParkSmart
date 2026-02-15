@@ -64,7 +64,7 @@ export default function MapView({ destination, carparks, selectedCarpark, onSele
     destMarkerRef.current = L.marker([destination.lat, destination.lng], { icon: destIcon })
       .addTo(map)
       .bindPopup(
-        `<div style="font-family: DM Sans, sans-serif; padding: 4px;">
+        `<div style="font-family: Outfit, sans-serif; padding: 4px;">
           <strong>${destination.name}</strong><br/>
           <small style="color: #64748B;">Your destination</small>
         </div>`
@@ -76,11 +76,11 @@ export default function MapView({ destination, carparks, selectedCarpark, onSele
     carparks.slice(0, 20).forEach((cp, i) => {
       const isSelected = selectedCarpark && cp.id === selectedCarpark.id;
       const color =
-        cp.badge === "BEST MATCH" ? "#6366F1"
-        : cp.badge === "CHEAPEST"  ? "#10B981"
-        : cp.badge === "NEAREST"   ? "#F59E0B"
-        : isSelected               ? "#818CF8"
-        : "#475569";
+        cp.badge === "BEST MATCH" ? "#D4A85A"
+        : cp.badge === "CHEAPEST"  ? "#00CCA8"
+        : cp.badge === "NEAREST"   ? "#F07840"
+        : isSelected               ? "#F0C47A"
+        : "#4A4340";
 
       const size = isSelected ? 30 : 24;
       const icon = L.divIcon({
@@ -93,7 +93,7 @@ export default function MapView({ destination, carparks, selectedCarpark, onSele
           display: flex; align-items: center; justify-content: center;
           font-size: ${isSelected ? 12 : 10}px; font-weight: 800;
           color: #fff; transition: all 0.3s;
-          font-family: 'Space Mono', monospace;
+          font-family: 'Rajdhani', sans-serif;
         ">${i + 1}</div>`,
         iconSize: [size, size],
         iconAnchor: [size / 2, size / 2],
@@ -102,12 +102,12 @@ export default function MapView({ destination, carparks, selectedCarpark, onSele
       const marker = L.marker([cp.lat, cp.lng], { icon })
         .addTo(map)
         .bindPopup(
-          `<div style="font-family: DM Sans, sans-serif; padding: 4px; min-width: 160px;">
+          `<div style="font-family: Outfit, sans-serif; padding: 4px; min-width: 160px;">
             <strong style="font-size: 13px;">${cp.name}</strong><br/>
             <div style="margin-top: 4px; font-size: 12px; color: #64748B;">
               ${cp.agency} · ${cp.availableLots} lots · ${cp.walkTimeMin}min walk
             </div>
-            <div style="margin-top: 4px; font-size: 16px; font-weight: 800; color: #10B981;">
+            <div style="margin-top: 4px; font-size: 16px; font-weight: 700; color: #00CCA8; font-family: 'IBM Plex Mono', monospace;">
               $${cp.cost.toFixed(2)}
             </div>
           </div>`,

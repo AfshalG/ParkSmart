@@ -9,7 +9,7 @@ function ScoreRing({ score, size = 48 }) {
   const r = (size - 6) / 2;
   const circ = 2 * Math.PI * r;
   const offset = circ - (score / 100) * circ;
-  const color = score >= 70 ? "#10B981" : score >= 45 ? "#F59E0B" : "#EF4444";
+  const color = score >= 70 ? "#00CCA8" : score >= 45 ? "#F07840" : "#E05555";
   return (
     <svg width={size} height={size} style={{ transform: "rotate(-90deg)", flexShrink: 0 }}>
       <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="3" />
@@ -59,17 +59,24 @@ function StatBox({ label, value, sub, color }) {
   );
 }
 
-function CarparkCard({ carpark, isSelected, isFav, onSelect, onNavigate, onToggleFav, duration }) {
+function CarparkCard({ carpark, isSelected, isFav, onSelect, onNavigate, onToggleFav, duration, staggerIndex = 0 }) {
   const cp = carpark;
   const lotsClass =
     cp.availableLots > 30 ? styles.lotsHigh
     : cp.availableLots > 10 ? styles.lotsMid
     : styles.lotsLow;
 
+  const badgeClass =
+    cp.badge === "BEST MATCH" ? styles.cardBestMatch
+    : cp.badge === "CHEAPEST"  ? styles.cardCheapest
+    : cp.badge === "NEAREST"   ? styles.cardNearest
+    : "";
+
   return (
     <div
       onClick={() => onSelect(cp)}
-      className={`${styles.card} ${isSelected ? styles.cardSelected : ""} ${isFav ? styles.cardFavourited : ""}`}
+      className={`${styles.card} ${badgeClass} ${isSelected ? styles.cardSelected : ""} ${isFav ? styles.cardFavourited : ""}`}
+      style={{ '--stagger-delay': `${staggerIndex * 55}ms` }}
     >
       <div className={styles.cardTopRight}>
         {(cp.badge || cp.isFreeToday) && (
@@ -275,17 +282,17 @@ export default function ResultsList({ carparks, recommendations, selectedCarpark
 
       <div className={styles.list}>
         {carparks.slice(0, 15).map((cp, i) => (
-          <div key={cp.id} style={{ animation: `slideUp 0.4s ease ${i * 0.05}s both` }}>
-            <CarparkCard
-              carpark={cp}
-              isSelected={selectedCarpark?.id === cp.id}
-              isFav={favIds.has(cp.id)}
-              onSelect={onSelectCarpark}
-              onNavigate={onNavigate}
-              onToggleFav={handleToggleFav}
-              duration={duration}
-            />
-          </div>
+          <CarparkCard
+            key={cp.id}
+            carpark={cp}
+            isSelected={selectedCarpark?.id === cp.id}
+            isFav={favIds.has(cp.id)}
+            onSelect={onSelectCarpark}
+            onNavigate={onNavigate}
+            onToggleFav={handleToggleFav}
+            duration={duration}
+            staggerIndex={i}
+          />
         ))}
       </div>
 

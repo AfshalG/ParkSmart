@@ -47,12 +47,12 @@
 .count {
   font-size: 12px;
   font-weight: 700;
-  color: var(--accent-light);
-  background: rgba(99, 102, 241, 0.12);
-  border: 1px solid rgba(99, 102, 241, 0.25);
+  color: var(--amber-light);
+  background: var(--amber-dim);
+  border: 1px solid rgba(212, 168, 90, 0.25);
   border-radius: 10px;
   padding: 2px 8px;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-display);
 }
 
 /* ── List ── */
@@ -86,7 +86,7 @@
 .agencyChip {
   font-size: 10px;
   font-weight: 700;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-display);
   border: 1px solid;
   border-radius: 5px;
   padding: 2px 7px;
@@ -126,7 +126,7 @@
 .cardId {
   font-size: 11px;
   color: var(--text-muted);
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-display);
   margin-bottom: 14px;
 }
 
@@ -139,16 +139,19 @@
 .actionBtn {
   flex: 1;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 9px;
   border: none;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  color: #fff;
+  background: var(--amber);
+  color: #0A0A0A;
   font-size: 13px;
   font-weight: 700;
-  font-family: inherit;
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: all 0.2s;
 }
+.actionBtn:active { transform: scale(0.97); }
 
 .actionBtnSecondary {
   flex: 1;

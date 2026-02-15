@@ -29,9 +29,9 @@ export default function ParkedMap({ lat, lng }) {
       className: "custom-marker",
       html: `<div style="
         width: 40px; height: 40px; border-radius: 50%;
-        background: linear-gradient(135deg, #6366F1, #8B5CF6);
-        border: 3px solid #fff;
-        box-shadow: 0 2px 12px rgba(99,102,241,0.5);
+        background: #D4A85A;
+        border: 3px solid #F0C47A;
+        box-shadow: 0 2px 12px rgba(212,168,90,0.5);
         display: flex; align-items: center; justify-content: center;
         font-size: 20px;
       ">🚗</div>`,

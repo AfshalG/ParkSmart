@@ -29,7 +29,7 @@
 }
 
 .errorBannerLink {
-  color: #818cf8;
+  color: var(--amber-light);
 }
 
 /* Empty / welcome state */
@@ -71,5 +71,6 @@
 .welcomeFeatureLabel {
   font-size: 11px;
   color: var(--text-muted);
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
 }
