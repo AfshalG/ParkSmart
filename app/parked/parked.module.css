@@ -35,15 +35,15 @@
   margin: 0 auto;
 }
 
-/* ── Duration picker ── */
-.durationBlock {
+/* ── Shared picker block (duration + reminder) ── */
+.pickerBlock {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 16px;
 }
 
-.durationTitle {
+.pickerTitle {
   font-size: 11px;
   font-weight: 700;
   color: var(--text-muted);
@@ -53,6 +53,7 @@
   margin-bottom: 10px;
 }
 
+/* ── Duration grid ── */
 .durationGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -76,6 +77,47 @@
   border-color: var(--border-active);
   background: rgba(99, 102, 241, 0.15);
   color: var(--accent-light);
+}
+
+/* ── Reminder grid ── */
+.reminderGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.reminderBtn {
+  padding: 8px 0;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.reminderBtnActive {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--green);
+}
+
+.reminderHint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* ── Reminder status line (active session) ── */
+.reminderStatus {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
 }
 
 /* ── Park button ── */

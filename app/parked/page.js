@@ -2,6 +2,11 @@
 import { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { saveSession, getSession, extendSession, clearSession } from "@/lib/parkedStorage";
+import {
+  requestNotificationPermission,
+  scheduleParkingReminder,
+  cancelParkingReminder,
+} from "@/lib/notifications";
 import styles from "./parked.module.css";
 
 const ParkedMap = dynamic(() => import("@/components/ParkedMap"), { ssr: false });
@@ -13,6 +18,14 @@ const DURATION_PRESETS = [
   { label: "2h",   ms: 120 * 60 * 1000 },
   { label: "3h",   ms: 180 * 60 * 1000 },
   { label: "4h",   ms: 240 * 60 * 1000 },
+];
+
+const REMINDER_PRESETS = [
+  { label: "None", mins: 0 },
+  { label: "5 min", mins: 5 },
+  { label: "10 min", mins: 10 },
+  { label: "15 min", mins: 15 },
+  { label: "30 min", mins: 30 },
 ];
 
 function formatCountdown(ms) {
@@ -39,6 +52,7 @@ export default function ParkedPage() {
   const [session, setSession] = useState(null);
   const [countdown, setCountdown] = useState(null);
   const [selectedDuration, setSelectedDuration] = useState(DURATION_PRESETS[3]); // 2h default
+  const [selectedReminder, setSelectedReminder] = useState(REMINDER_PRESETS[3]); // 15 min default
   const [gpsState, setGpsState] = useState("idle"); // idle | loading | error
   const [gpsError, setGpsError] = useState("");
 
@@ -65,16 +79,22 @@ export default function ParkedPage() {
     setGpsState("loading");
     setGpsError("");
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
+      async (pos) => {
         const { latitude: lat, longitude: lng } = pos.coords;
-        const saved = saveSession({
-          lat,
-          lng,
-          expiresAt: Date.now() + selectedDuration.ms,
-          label: "",
-        });
+        const expiresAt = Date.now() + selectedDuration.ms;
+        const reminderMins = selectedReminder.mins;
+
+        const saved = saveSession({ lat, lng, expiresAt, label: "", reminderMins });
         setSession(saved);
         setGpsState("idle");
+
+        // Request permission + schedule reminder (non-blocking, best-effort)
+        if (reminderMins > 0) {
+          const granted = await requestNotificationPermission();
+          if (granted) {
+            await scheduleParkingReminder({ expiresAt, reminderMins });
+          }
+        }
       },
       (err) => {
         const msgs = {
@@ -87,14 +107,23 @@ export default function ParkedPage() {
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
-  }, [selectedDuration]);
+  }, [selectedDuration, selectedReminder]);
 
-  const handleExtend = (extraMs) => {
+  const handleExtend = async (extraMs) => {
     const updated = extendSession(extraMs);
-    if (updated) setSession({ ...updated });
+    if (!updated) return;
+    setSession({ ...updated });
+    // Reschedule reminder with the same lead time but updated expiry
+    if (updated.reminderMins > 0) {
+      await scheduleParkingReminder({
+        expiresAt: updated.expiresAt,
+        reminderMins: updated.reminderMins,
+      });
+    }
   };
 
-  const handleClear = () => {
+  const handleClear = async () => {
+    await cancelParkingReminder();
     clearSession();
     setSession(null);
     setGpsState("idle");
@@ -110,6 +139,9 @@ export default function ParkedPage() {
   // ── Active session view ──────────────────────────────────────────────────
   if (session) {
     const { text: countdownText, expired } = formatCountdown(countdown ?? 0);
+    const reminderLabel = session.reminderMins
+      ? `Reminder set · ${session.reminderMins} min before expiry`
+      : "No reminder set";
 
     return (
       <main className={styles.main}>
@@ -127,6 +159,9 @@ export default function ParkedPage() {
             </div>
             <div className={styles.timerMeta}>
               Parked at {formatTime(session.parkedAt)} · until {formatTime(session.expiresAt)}
+            </div>
+            <div className={styles.reminderStatus}>
+              🔔 {reminderLabel}
             </div>
 
             {/* Extend buttons */}
@@ -161,8 +196,8 @@ export default function ParkedPage() {
         </p>
 
         {/* Duration picker */}
-        <div className={styles.durationBlock}>
-          <div className={styles.durationTitle}>Parking duration</div>
+        <div className={styles.pickerBlock}>
+          <div className={styles.pickerTitle}>Parking duration</div>
           <div className={styles.durationGrid}>
             {DURATION_PRESETS.map((p) => (
               <button
@@ -174,6 +209,27 @@ export default function ParkedPage() {
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Reminder picker */}
+        <div className={styles.pickerBlock}>
+          <div className={styles.pickerTitle}>Reminder before expiry</div>
+          <div className={styles.reminderGrid}>
+            {REMINDER_PRESETS.map((r) => (
+              <button
+                key={r.label}
+                className={`${styles.reminderBtn} ${selectedReminder.mins === r.mins ? styles.reminderBtnActive : ""}`}
+                onClick={() => setSelectedReminder(r)}
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
+          {selectedReminder.mins > 0 && (
+            <p className={styles.reminderHint}>
+              You&apos;ll get a notification {selectedReminder.label} before your time is up.
+            </p>
+          )}
         </div>
 
         {/* GPS error */}
