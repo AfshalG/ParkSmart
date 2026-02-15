@@ -100,7 +100,7 @@
   color: #000;
   font-size: 9px;
   font-weight: 800;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-display);
   display: flex;
   align-items: center;
   justify-content: center;

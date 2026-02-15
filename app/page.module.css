@@ -29,7 +29,7 @@
 }
 
 .errorBannerLink {
-  color: #818cf8;
+  color: var(--amber-light);
 }
 
 /* Empty / welcome state */
