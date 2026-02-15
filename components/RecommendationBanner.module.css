@@ -22,11 +22,11 @@
   color: var(--yellow);
 }
 
-/* 🌙 NIGHT_ACTIVE — indigo */
+/* 🌙 NIGHT_ACTIVE — amber */
 .typeNightActive {
-  background: rgba(99, 102, 241, 0.1);
-  border-color: rgba(99, 102, 241, 0.3);
-  color: var(--accent-light);
+  background: var(--amber-dim);
+  border-color: rgba(212, 168, 90, 0.3);
+  color: var(--amber-light);
 }
 
 /* 🌅 EARLY_BIRD — muted */
