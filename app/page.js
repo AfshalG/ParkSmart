@@ -1,9 +1,10 @@
 "use client";
 import { useState, useCallback } from "react";
 import SearchPanel from "@/components/SearchPanel";
-import ResultsList from "@/components/ResultsList";
+import ResultsList, { ResultsSkeleton } from "@/components/ResultsList";
 import MapView from "@/components/MapView";
 import Header from "@/components/Header";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default function Home() {
   const [destination, setDestination] = useState(null);
@@ -53,6 +54,7 @@ export default function Home() {
 
   return (
     <main style={{ minHeight: "100vh", maxWidth: 480, margin: "0 auto", position: "relative" }}>
+      <ErrorBoundary>
       <Header />
       <SearchPanel onSearch={handleSearch} loading={loading} />
 
@@ -97,6 +99,8 @@ export default function Home() {
         </div>
       )}
 
+      {searched && loading && <ResultsSkeleton />}
+
       {searched && !loading && (
         <ResultsList
           carparks={carparks}
@@ -127,6 +131,7 @@ export default function Home() {
           </div>
         </div>
       )}
+      </ErrorBoundary>
     </main>
   );
 }

@@ -265,6 +265,42 @@ function StatBox({ label, value, sub, color }) {
   );
 }
 
+export function ResultsSkeleton() {
+  return (
+    <div style={{ padding: "0 24px 32px" }}>
+      {/* Summary bar skeleton */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+        {[90, 80, 110].map((w, i) => (
+          <div key={i} className="skeleton" style={{ height: 52, flex: "1 0 auto", minWidth: w, borderRadius: 12 }} />
+        ))}
+      </div>
+      {/* Card skeletons */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {[0, 1, 2, 3].map((i) => (
+          <div
+            key={i}
+            style={{
+              background: "var(--bg-card)",
+              border: "1px solid var(--border)",
+              borderRadius: 14,
+              padding: 16,
+            }}
+          >
+            <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+              <div className="skeleton" style={{ width: 52, height: 52, borderRadius: "50%", flexShrink: 0 }} />
+              <div style={{ flex: 1 }}>
+                <div className="skeleton" style={{ height: 16, width: "60%", marginBottom: 8 }} />
+                <div className="skeleton" style={{ height: 12, width: "40%", marginBottom: 8 }} />
+                <div className="skeleton" style={{ height: 20, width: "50%" }} />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function ResultsList({ carparks, selectedCarpark, onSelectCarpark, onNavigate, duration }) {
   if (carparks.length === 0) {
     return (
