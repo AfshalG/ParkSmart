@@ -1,0 +1,168 @@
+.main {
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 20px calc(80px + env(safe-area-inset-bottom, 0px));
+}
+
+/* ── Empty state ── */
+.heroIcon {
+  font-size: 64px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.heroTitle {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.heroSub {
+  font-size: 14px;
+  color: var(--text-dim);
+  text-align: center;
+  line-height: 1.6;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.count {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--amber-light);
+  background: var(--amber-dim);
+  border: 1px solid rgba(212, 168, 90, 0.25);
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-family: var(--font-display);
+}
+
+/* ── List ── */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Card ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.cardInfo {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.agencyChip {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 2px 7px;
+}
+
+.centralChip {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 2px 7px;
+}
+
+.removeBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.removeBtn:hover {
+  color: var(--red);
+}
+
+.cardName {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.cardId {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  margin-bottom: 14px;
+}
+
+/* ── Actions ── */
+.cardActions {
+  display: flex;
+  gap: 8px;
+}
+
+.actionBtn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 9px;
+  border: none;
+  background: var(--amber);
+  color: #0A0A0A;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.actionBtn:active { transform: scale(0.97); }
+
+.actionBtnSecondary {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}

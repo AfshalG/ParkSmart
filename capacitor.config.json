@@ -1,0 +1,13 @@
+{
+  "appId": "app.parksmart.sg",
+  "appName": "ParkSmart",
+  "webDir": "cap-shell",
+  "server": {
+    "url": "http://10.0.2.2:3000",
+    "cleartext": true
+  },
+  "android": {
+    "backgroundColor": "#0A0E1A",
+    "webContentsDebuggingEnabled": true
+  }
+}

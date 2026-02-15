@@ -1,0 +1,433 @@
+/* ---- Summary bar ---- */
+.summaryBar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.summaryChip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 12px;
+  flex: 1 0 auto;
+  min-width: 90px;
+}
+
+.summaryChipLabel {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.summaryChipValue {
+  font-size: 15px;
+  font-weight: 800;
+  margin-top: 1px;
+}
+
+/* ---- List wrapper ---- */
+.listWrapper {
+  padding: 0 24px 32px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.moreNote {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 12px;
+}
+
+/* ---- Empty state ---- */
+.emptyState {
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.emptyText {
+  color: var(--text-dim);
+  font-size: 14px;
+}
+
+/* ---- Carpark card ---- */
+.card {
+  background: var(--bg-secondary);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-left: 3px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  animation: cardEntry 0.3s ease both;
+  animation-delay: var(--stagger-delay, 0ms);
+}
+
+.cardSelected {
+  background: #1a1e26; /* fallback for Android WebView < Chrome 111 (no color-mix support) */
+  background: color-mix(in srgb, var(--bg-secondary) 88%, var(--amber) 12%);
+  border-color: rgba(212, 168, 90, 0.12);
+  border-left-color: var(--amber);
+  box-shadow: 0 0 0 1px rgba(212, 168, 90, 0.15), 0 4px 20px rgba(0,0,0,0.35);
+}
+
+/* Left bar coloring by result type */
+.cardBestMatch  { border-left-color: var(--amber); }
+.cardCheapest   { border-left-color: var(--teal); }
+.cardNearest    { border-left-color: var(--orange); }
+
+/* Favourite border */
+.cardFavourited {
+  border-color: rgba(212, 168, 90, 0.2);
+}
+
+.cardBody {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.cardInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.cardName {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: 28px; /* reserve space for star button */
+}
+
+.cardNameWithBadge {
+  padding-right: 80px;
+}
+
+.cardMeta {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.centralLabel {
+  font-size: 10px;
+  color: var(--yellow);
+  font-weight: 600;
+}
+
+.cardStats {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.cardCost {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--teal);
+  font-family: var(--font-mono);
+}
+
+.cardCostLabel {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+.cardMinorStats {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.lotsHigh  { color: var(--green);  font-weight: 600; }
+.lotsMid   { color: var(--yellow); font-weight: 600; }
+.lotsLow   { color: var(--red);    font-weight: 600; }
+
+/* ---- Expanded detail panel ---- */
+.expandedPanel {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  animation: slideUp 0.3s ease;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.statBox {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.statBoxLabel {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.statBoxValue {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+.statBoxSub {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 1px;
+}
+
+/* ---- Cost breakdown ---- */
+.costBreakdown {
+  margin-top: 10px;
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.costBreakdownTitle {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--teal);
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.costRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.capRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--green);
+  margin-bottom: 4px;
+}
+
+.costTotal {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 4px;
+  margin-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.costTotalAmount {
+  color: var(--teal);
+  font-family: var(--font-mono);
+}
+
+/* ---- Expanded action buttons row ---- */
+.expandedBtns {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* ---- Navigate button ---- */
+.navigateBtn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 9px;
+  border: none;
+  background: var(--teal);
+  color: #0A0A0A;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 15px rgba(0, 204, 168, 0.2);
+  transition: all 0.2s;
+}
+.navigateBtn:active { transform: scale(0.97); }
+
+/* ---- Park Here button ---- */
+.parkHereBtn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 9px;
+  border: 1px solid rgba(212, 168, 90, 0.35);
+  background: var(--amber-dim);
+  color: var(--amber-light);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+.parkHereBtn:active { transform: scale(0.97); }
+
+/* ---- Badge ---- */
+.badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-family: var(--font-display);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.badgeBestMatch {
+  background: var(--amber-dim);
+  color: var(--amber-light);
+  border-color: rgba(212, 168, 90, 0.3);
+}
+.badgeCheapest {
+  background: rgba(0, 204, 168, 0.12);
+  color: var(--teal);
+  border-color: rgba(0, 204, 168, 0.25);
+}
+.badgeNearest {
+  background: rgba(240, 120, 64, 0.12);
+  color: var(--orange);
+  border-color: rgba(240, 120, 64, 0.25);
+}
+.badgeFree {
+  background: rgba(0, 204, 168, 0.12);
+  color: var(--teal);
+  border-color: rgba(0, 204, 168, 0.25);
+}
+
+/* ---- Favourite state ---- */
+.cardFavourited {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+/* Top-right area: stacks badge + star vertically */
+.cardTopRight {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+/* Re-usable slot inside cardTopRight for badge(s) */
+.badgeSlot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.starBtn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px;
+  opacity: 0.35;
+  transition: opacity 0.15s, transform 0.15s;
+  color: inherit;
+}
+
+.starBtn:hover {
+  opacity: 0.7;
+  transform: scale(1.2);
+}
+
+.starBtnActive {
+  opacity: 1;
+}
+
+/* ---- Agency badge ---- */
+.agencyBadge {
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+}
+
+.agencyHDB { background: rgba(56, 182, 255, 0.12); color: #60CBFF; }
+.agencyURA { background: var(--amber-dim);          color: var(--amber-light); }
+.agencyLTA { background: rgba(0, 204, 168, 0.12);   color: var(--teal); }
+
+/* ---- Skeleton ---- */
+.skeletonSummaryBar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.skeletonCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.skeletonCardBody {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.skeletonAvatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skeletonLines {
+  flex: 1;
+}
+
+.skeletonLine {
+  border-radius: 8px;
+  margin-bottom: 8px;
+}

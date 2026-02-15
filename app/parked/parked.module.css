@@ -1,0 +1,329 @@
+.main {
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 20px calc(80px + env(safe-area-inset-bottom, 0px));
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Empty state ── */
+.heroIcon {
+  font-size: 64px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.heroTitle {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.heroSub {
+  font-size: 14px;
+  color: var(--text-dim);
+  text-align: center;
+  line-height: 1.6;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+/* ── Shared picker block (duration + reminder) ── */
+.pickerBlock {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.pickerTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--font-display);
+  margin-bottom: 10px;
+}
+
+/* ── Duration grid ── */
+.durationGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.durationBtn {
+  padding: 10px 0;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.durationBtnActive {
+  border-color: var(--border-active);
+  background: var(--amber-dim);
+  color: var(--amber-light);
+}
+
+/* ── Reminder grid ── */
+.reminderGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.reminderBtn {
+  padding: 8px 0;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.reminderBtnActive {
+  border-color: rgba(0, 204, 168, 0.4);
+  background: rgba(0, 204, 168, 0.1);
+  color: var(--teal);
+}
+
+.reminderHint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* ── Reminder status line (active session) ── */
+.reminderStatus {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+/* ── Park button ── */
+.parkBtn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  background: var(--amber);
+  color: #0A0A0A;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(212, 168, 90, 0.25);
+  transition: all 0.2s;
+}
+
+.parkBtn:active:not(:disabled) {
+  transform: scale(0.98);
+  box-shadow: 0 2px 12px rgba(212, 168, 90, 0.2);
+}
+
+.parkBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Error banner ── */
+.errorBanner {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #f87171;
+  line-height: 1.5;
+}
+
+/* ── Timer card (active session) ── */
+.timerCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.timerLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: var(--font-display);
+  margin-bottom: 8px;
+}
+
+.timerDisplay {
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--amber-light);
+  font-family: var(--font-mono);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+
+.timerExpired {
+  color: var(--red);
+}
+
+/* Time remaining progress bar */
+.timerProgressTrack {
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.timerProgressFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1s linear, background 0.5s ease;
+  background: var(--amber);
+}
+
+.timerProgressExpiring {
+  background: var(--orange);
+}
+
+.timerProgressExpired {
+  background: var(--red);
+  width: 100% !important;
+}
+
+.timerMeta {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+/* ── Extend row ── */
+.extendRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.extendLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+}
+
+.extendBtn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border-active);
+  background: var(--amber-dim);
+  color: var(--amber-light);
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* ── Navigate button ── */
+.navigateBtn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  background: var(--teal);
+  color: #0A0A0A;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 204, 168, 0.2);
+  transition: all 0.2s;
+}
+.navigateBtn:active { transform: scale(0.97); }
+
+/* ── Done Parking button ── */
+.clearBtn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.06);
+  color: #f87171;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* ── Spend tracker additions ── */
+.carparkChip {
+  background: var(--amber-dim);
+  border: 1px solid rgba(212, 168, 90, 0.25);
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--amber-light);
+  text-align: center;
+}
+
+.loggedBanner {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--green);
+  text-align: center;
+}
+
+.prefilledChip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--amber-dim);
+  border: 1px solid rgba(212, 168, 90, 0.25);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--amber-light);
+}
+
+.prefilledClear {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}

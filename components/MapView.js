@@ -1,37 +1,31 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+// This component is loaded via next/dynamic with ssr:false in page.js,
+// so it never runs on the server. Leaflet can be imported directly.
+import { useEffect, useRef } from "react";
+import L from "leaflet";
+import styles from "./MapView.module.css";
 
 export default function MapView({ destination, carparks, selectedCarpark, onSelectCarpark }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markersRef = useRef([]);
   const destMarkerRef = useRef(null);
-  const [leaflet, setLeaflet] = useState(null);
 
-  // Dynamically import Leaflet (not SSR-safe)
+  // Initialize map once
   useEffect(() => {
-    import("leaflet").then((L) => {
-      setLeaflet(L.default || L);
-    });
-  }, []);
+    if (!mapRef.current || mapInstanceRef.current) return;
 
-  // Initialize map
-  useEffect(() => {
-    if (!leaflet || !mapRef.current || mapInstanceRef.current) return;
-
-    const map = leaflet.map(mapRef.current, {
+    const map = L.map(mapRef.current, {
       center: [destination.lat, destination.lng],
       zoom: 15,
       zoomControl: true,
       attributionControl: true,
     });
 
-    leaflet
-      .tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; <a href="https://openstreetmap.org">OSM</a>',
-        maxZoom: 19,
-      })
-      .addTo(map);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://openstreetmap.org">OSM</a>',
+      maxZoom: 19,
+    }).addTo(map);
 
     mapInstanceRef.current = map;
 
@@ -39,11 +33,12 @@ export default function MapView({ destination, carparks, selectedCarpark, onSele
       map.remove();
       mapInstanceRef.current = null;
     };
-  }, [leaflet, destination]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run once on mount — destination centering handled by the bounds effect below
 
-  // Update markers
+  // Update markers whenever carparks, selectedCarpark, or destination changes
   useEffect(() => {
-    if (!leaflet || !mapInstanceRef.current) return;
+    if (!mapInstanceRef.current) return;
     const map = mapInstanceRef.current;
 
     // Clear old markers
@@ -52,7 +47,7 @@ export default function MapView({ destination, carparks, selectedCarpark, onSele
     if (destMarkerRef.current) destMarkerRef.current.remove();
 
     // Destination marker
-    const destIcon = leaflet.divIcon({
+    const destIcon = L.divIcon({
       className: "custom-marker",
       html: `<div style="
         width: 32px; height: 32px; border-radius: 50%;
@@ -66,11 +61,10 @@ export default function MapView({ destination, carparks, selectedCarpark, onSele
       iconAnchor: [16, 16],
     });
 
-    destMarkerRef.current = leaflet
-      .marker([destination.lat, destination.lng], { icon: destIcon })
+    destMarkerRef.current = L.marker([destination.lat, destination.lng], { icon: destIcon })
       .addTo(map)
       .bindPopup(
-        `<div style="font-family: DM Sans, sans-serif; padding: 4px;">
+        `<div style="font-family: Outfit, sans-serif; padding: 4px;">
           <strong>${destination.name}</strong><br/>
           <small style="color: #64748B;">Your destination</small>
         </div>`
@@ -82,44 +76,38 @@ export default function MapView({ destination, carparks, selectedCarpark, onSele
     carparks.slice(0, 20).forEach((cp, i) => {
       const isSelected = selectedCarpark && cp.id === selectedCarpark.id;
       const color =
-        cp.badge === "BEST MATCH"
-          ? "#6366F1"
-          : cp.badge === "CHEAPEST"
-          ? "#10B981"
-          : cp.badge === "NEAREST"
-          ? "#F59E0B"
-          : isSelected
-          ? "#818CF8"
-          : "#475569";
+        cp.badge === "BEST MATCH" ? "#D4A85A"
+        : cp.badge === "CHEAPEST"  ? "#00CCA8"
+        : cp.badge === "NEAREST"   ? "#F07840"
+        : isSelected               ? "#F0C47A"
+        : "#4A4340";
 
-      const icon = leaflet.divIcon({
+      const size = isSelected ? 30 : 24;
+      const icon = L.divIcon({
         className: "custom-marker",
         html: `<div style="
-          width: ${isSelected ? 30 : 24}px;
-          height: ${isSelected ? 30 : 24}px;
-          border-radius: 50%;
+          width: ${size}px; height: ${size}px; border-radius: 50%;
           background: ${color};
           border: 2px solid rgba(255,255,255,${isSelected ? 0.9 : 0.5});
           box-shadow: 0 2px 8px rgba(0,0,0,0.3)${isSelected ? ", 0 0 15px " + color + "60" : ""};
           display: flex; align-items: center; justify-content: center;
           font-size: ${isSelected ? 12 : 10}px; font-weight: 800;
           color: #fff; transition: all 0.3s;
-          font-family: 'Space Mono', monospace;
+          font-family: 'Rajdhani', sans-serif;
         ">${i + 1}</div>`,
-        iconSize: [isSelected ? 30 : 24, isSelected ? 30 : 24],
-        iconAnchor: [isSelected ? 15 : 12, isSelected ? 15 : 12],
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2],
       });
 
-      const marker = leaflet
-        .marker([cp.lat, cp.lng], { icon })
+      const marker = L.marker([cp.lat, cp.lng], { icon })
         .addTo(map)
         .bindPopup(
-          `<div style="font-family: DM Sans, sans-serif; padding: 4px; min-width: 160px;">
+          `<div style="font-family: Outfit, sans-serif; padding: 4px; min-width: 160px;">
             <strong style="font-size: 13px;">${cp.name}</strong><br/>
             <div style="margin-top: 4px; font-size: 12px; color: #64748B;">
               ${cp.agency} · ${cp.availableLots} lots · ${cp.walkTimeMin}min walk
             </div>
-            <div style="margin-top: 4px; font-size: 16px; font-weight: 800; color: #10B981;">
+            <div style="margin-top: 4px; font-size: 16px; font-weight: 700; color: #00CCA8; font-family: 'IBM Plex Mono', monospace;">
               $${cp.cost.toFixed(2)}
             </div>
           </div>`,
@@ -131,11 +119,14 @@ export default function MapView({ destination, carparks, selectedCarpark, onSele
       bounds.push([cp.lat, cp.lng]);
     });
 
-    // Fit bounds
+    // Fit bounds to show all markers; fall back to centering on the destination
+    // alone when no carparks were found so the map still moves to the new area.
     if (bounds.length > 1) {
       map.fitBounds(bounds, { padding: [30, 30], maxZoom: 16 });
+    } else {
+      map.setView([destination.lat, destination.lng], 15, { animate: true });
     }
-  }, [leaflet, carparks, selectedCarpark, destination, onSelectCarpark]);
+  }, [carparks, selectedCarpark, destination, onSelectCarpark]);
 
   // Pan to selected carpark
   useEffect(() => {
@@ -144,15 +135,8 @@ export default function MapView({ destination, carparks, selectedCarpark, onSele
   }, [selectedCarpark]);
 
   return (
-    <div
-      style={{
-        borderRadius: 14,
-        overflow: "hidden",
-        border: "1px solid var(--border)",
-        height: 250,
-      }}
-    >
-      <div ref={mapRef} style={{ width: "100%", height: "100%" }} />
+    <div className={styles.container}>
+      <div ref={mapRef} className={styles.map} />
     </div>
   );
 }
