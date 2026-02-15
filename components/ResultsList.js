@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 function ScoreRing({ score, size = 48 }) {
   const r = (size - 6) / 2;
@@ -198,7 +198,7 @@ function CarparkCard({ carpark, isSelected, onSelect, onNavigate, duration }) {
               💡 COST BREAKDOWN
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "var(--text-secondary)", marginBottom: 4 }}>
-              <span>{cp.rateLabel} × {duration}h</span>
+              <span>${cp.ratePerHour.toFixed(2)}/hr × {duration}h</span>
               <span>${(cp.ratePerHour * duration).toFixed(2)}</span>
             </div>
             {cp.capApplied && (
@@ -275,9 +275,11 @@ export default function ResultsList({ carparks, selectedCarpark, onSelectCarpark
     );
   }
 
-  const bestPrice = Math.min(...carparks.map((c) => c.cost));
-  const worstPrice = Math.max(...carparks.map((c) => c.cost));
-  const savings = (worstPrice - bestPrice).toFixed(2);
+  const { bestPrice, savings } = useMemo(() => {
+    const best = Math.min(...carparks.map((c) => c.cost));
+    const worst = Math.max(...carparks.map((c) => c.cost));
+    return { bestPrice: best, savings: (worst - best).toFixed(2) };
+  }, [carparks]);
 
   return (
     <div style={{ padding: "0 24px 32px" }}>
