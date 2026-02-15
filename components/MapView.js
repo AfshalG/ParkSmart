@@ -131,9 +131,12 @@ export default function MapView({ destination, carparks, selectedCarpark, onSele
       bounds.push([cp.lat, cp.lng]);
     });
 
-    // Fit bounds
+    // Fit bounds to show all markers; fall back to centering on the destination
+    // alone when no carparks were found so the map still moves to the new area.
     if (bounds.length > 1) {
       map.fitBounds(bounds, { padding: [30, 30], maxZoom: 16 });
+    } else {
+      map.setView([destination.lat, destination.lng], 15, { animate: true });
     }
   }, [leaflet, carparks, selectedCarpark, destination, onSelectCarpark]);
 
