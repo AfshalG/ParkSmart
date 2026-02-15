@@ -3,12 +3,20 @@ import "./globals.css";
 export const metadata = {
   title: "ParkSmart — Singapore Parking Optimizer",
   description: "Find the most optimal parking spot near your destination in Singapore",
+  // PWA / mobile web app meta
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "ParkSmart",
+  },
 };
 
 export const viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
+  // Match the app's dark background as the browser chrome colour on Android
+  themeColor: "#6366F1",
 };
 
 export default function RootLayout({ children }) {
