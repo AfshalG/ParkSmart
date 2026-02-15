@@ -5,7 +5,9 @@ export default function Header() {
     <div className={styles.wrapper}>
       <div className={styles.glow} />
       <div className={styles.row}>
-        <div className={styles.logoBox}>🅿️</div>
+        <div className={styles.logoBox}>
+          <span className={styles.logoLetter}>P</span>
+        </div>
         <div>
           <h1 className={styles.appName}>ParkSmart</h1>
           <p className={styles.subtitle}>SINGAPORE PARKING OPTIMIZER</p>
