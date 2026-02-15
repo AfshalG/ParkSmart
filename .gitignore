@@ -4,3 +4,12 @@ node_modules/
 .env*.local
 out/
 .vercel
+
+# Capacitor / Android build artifacts
+android/.gradle/
+android/build/
+android/app/build/
+android/app/release/
+ios/App/Pods/
+ios/App/build/
+ios/.xcode.env.local
